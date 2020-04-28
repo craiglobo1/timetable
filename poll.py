@@ -72,37 +72,67 @@ popularClasses = []
 check = True
 popIndex = 0
 
-for clas in classes:
+
+
+for i,clas in enumerate(classes):
     if clas[0] in popularityList:
         popularClasses.append(clas)
+    
+for i,clas in enumerate(classes):
+    if clas[0] in popularityList:
+        classes.pop(i)
 
 print(f'popular classes:\n{popularClasses}\n')
 
-for block in blocks:
-    block.append(popularClasses[popIndex][0])
-    popularClasses[popIndex][1] -= 1
+
+while check:
+    for block in blocks:
+        if not(popularClasses):
+            break
+
+        block.append(popularClasses[popIndex][0])
+        popularClasses[popIndex][1] -= 1
+
+        if popularClasses[popIndex][1] == 0:
+            popularClasses.pop(popIndex)
+            
+    if not(popularClasses):
+            check = False
 
 
+for i in range(noOfBlocks):
+    NoClassesPerBlock[i] -= len(blocks[i])
 
 
+classes = [ clas for clas in classes  if clas[1] != 0 ]
 
+print(f'classes:\n{classes}\n')
 
+for i,classlength in enumerate(NoClassesPerBlock):
+    for j in range(classlength):
+        index = random.randint(0,len(classes)-1)
 
+        try:
+            if classes[index][1] == 0:
+                classes.pop(index)
+            currentClass = classes[index][0]
+        except:
+            pass
 
+        if blockLimitPerSubject == block.count(currentClass):
+            pass
+            pass
 
+        try:
+            blocks[i].append(currentClass)
+            classes[index][1] -= 1
+        except:
+            pass
 
-
-
-
-
-
-
-
-
-
-
-
-
+        if not(classes):
+            break
+    if not(classes):
+            break
 
 
 
@@ -129,5 +159,5 @@ for block in blocks:
 #     blocks.append(block)
 #     block = []
     
-# print(f'Block:\n{blocks}\n')
+print(f'Block:\n{blocks}\n')
 

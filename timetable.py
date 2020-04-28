@@ -5,6 +5,9 @@ class Timetable:
         self.schedule = []
         self.subjectList = ['physics','chemistry','biology','cs','business','accounts','economics','art','english','history','geography']
         self.STUDENTLIMIT = 28
+        self.studentsList = self.loadDataStudents()
+        self.teachersList = self.loadDataTeachers()
+        self.result = []
 
     def loadDataStudents(self):
         self.students = []
@@ -26,31 +29,18 @@ class Timetable:
 
 
     def getClassesForBlockTeacher(self):
-        teacherArr = self.loadDataTeachers()
-        for i in range(len(teacherArr)):
-            if teacherArr[i][1] == 'cs':
-                self.result.append(teacherArr[i][0])
-                self.result.append(teacherArr[i][1])
-        self.result = result
-        return result
+        self.result.append(self.teachersList[i][0])
+        self.result.append(self.teachersList[i][1])
 
-    def getClassesForBlockStudents(self,blockNo):
-        studentsList = self.loadDataStudents()
-        for i in range():
-            for data in studentsList:
-                if data[blockNo] == self.result[1]:
-                    self.studentInClassList.append([data[0],data[blockNo])
-        self.result.append(studentsList)
-
-    def printClassTeacher(self):
+    def getClassesForBlockStudents(self):
+        return NotImplementedError
+        
+    def PrintClassTeacher(self):
         run = True
         while run == True:
-            self.studentInClassList = []
-            self.result = []
-            print(time.getClassesForBlockTeacher())
+            getClassesForBlockTeacher()
             for i in range(4):
-                print(time.getClassesForBlockStudents(i))
-            if self.studentsList == []:run=False
+                pass
 
     def collateClasses(self):
         return NotImplementedError
@@ -68,3 +58,4 @@ class Timetable:
         return NotImplementedError
 
 time = Timetable()
+time.PrintClassTeacher()
