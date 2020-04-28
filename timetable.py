@@ -27,25 +27,28 @@ class Timetable:
 
     def getClassesForBlockTeacher(self):
         teacherArr = self.loadDataTeachers()
-        result = []
         for i in range(len(teacherArr)):
             if teacherArr[i][1] == 'cs':
-                result.append(teacherArr[i][0])
-                result.append(teacherArr[i][1])
+                self.result.append(teacherArr[i][0])
+                self.result.append(teacherArr[i][1])
         self.result = result
         return result
 
     def getClassesForBlockStudents(self,blockNo):
         studentsList = self.loadDataStudents()
-        self.studentsList = [[data[0],data[blockNo]] for data in studentsList]
+        for i in range():
+            for data in studentsList:
+                if data[blockNo] == self.result[1]:
+                    self.studentInClassList.append([data[0],data[blockNo])
         self.result.append(studentsList)
 
     def printClassTeacher(self):
         run = True
         while run == True:
+            self.studentInClassList = []
             self.result = []
             print(time.getClassesForBlockTeacher())
-            for i in range(1,5):
+            for i in range(4):
                 print(time.getClassesForBlockStudents(i))
             if self.studentsList == []:run=False
 

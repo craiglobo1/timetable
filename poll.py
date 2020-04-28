@@ -59,53 +59,75 @@ classLimitPerSubject = 3
 NoClassesPerBlock = chunkIt(totalClasses,noOfBlocks)
 
 print(f'No of classes per block:\n{NoClassesPerBlock}\n')
-blocks = []
-block = []
+
+blocks = [ [] for i in range(noOfBlocks)]
+
             
 popularityList = popularity(students,subjectList,4)
 print(f'Popularity:\n{popularityList}\n')
 
 
-popularClasses = 0
+
+popularClasses = []
 check = True
 popIndex = 0
 
 for clas in classes:
-    if clas in popularityList:
-        popularClasses += clas[1]
+    if clas[0] in popularityList:
+        popularClasses.append(clas)
+
+print(f'popular classes:\n{popularClasses}\n')
+
+for block in blocks:
+    block.append(popularClasses[popIndex][0])
+    popularClasses[popIndex][1] -= 1
 
 
-while check:
-    for i in range(4):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# for classlength in NoClassesPerBlock:
+#     for i in range(classlength):
         
+#         index = random.randint(0,len(classes)-1)
+#         currentClass = classes[index][0]
 
-    if popIndex == popularClasses:
-        break
-    popIndex += 1
+#         if (currentClass in popularityList) and (1 == block.count(currentClass)):
+#             pass
+#             pass
 
+#         if blockLimitPerSubject == block.count(currentClass):
+#             pass
+#             pass
 
-for classlength in NoClassesPerBlock:
-    for i in range(classlength):
-        
-        index = random.randint(0,len(classes)-1)
-        currentClass = classes[index][0]
+#         block.append(currentClass)
+#         classes[index][1] -= 1
 
-        if (currentClass in popularityList) and (1 == block.count(currentClass)):
-            pass
-            pass
+#         if classes[index][1] == 0:
+#             classes.pop(index)
 
-        if blockLimitPerSubject == block.count(currentClass):
-            pass
-            pass
-
-        block.append(currentClass)
-        classes[index][1] -= 1
-
-        if classes[index][1] == 0:
-            classes.pop(index)
-
-    blocks.append(block)
-    block = []
+#     blocks.append(block)
+#     block = []
     
-print(f'Block:\n{blocks}\n')
+# print(f'Block:\n{blocks}\n')
 
