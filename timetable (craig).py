@@ -1,4 +1,7 @@
 from math import floor
+from random import randint,choices,shuffle
+import numpy as np
+
 class Timetable:
     def __init__(self,startTime = (7,30),endtime = (1,50)):
         self.startTime = startTime
@@ -55,11 +58,12 @@ class period:
 class schedule:
     def __init__(self):
         self.noOfClassDays = 5   
-        self.blockLimit = 15
         self.periodLength = 40
         self.schedule = [ [] for i in range(self.noOfClassDays)]
         self.dayStartTime = (7,30)
         self.dayEndTime = (13,50)
+        self.weekdays = {'sunday': 0,'monday':1,'tuesday':2,'wensday':3,'thursday':4}
+        self.noOfBlocks = 4
 
     def calculateNoPeriods(self):
         return NotImplementedError
@@ -69,6 +73,7 @@ class schedule:
         
     def addRestrictionTimeWeekly(self,restrictionName,day,startTime,endTime):
         self.schedule[day].append(period(restrictionName,startTime,endTime))
+        schedule[day].sort(key=periodSort)
         
     def addRestrictionTimeDaily(self,restrictionName,startTime,endTime):
         for day in self.schedule:
@@ -96,6 +101,7 @@ class schedule:
         return totalTime
 
     def GetSchedule(self):
+        self.totalPeriodsWeek = 0
         for i in range(len(self.schedule)):
             for j in range(len(self.schedule[i])-1): 
                 periods = self.getFreePeriods(self.schedule[i][j],self.schedule[i][j+1])
@@ -106,9 +112,24 @@ class schedule:
                     newTime2 = self.addTime(newTime1,self.periodLength)
                     self.schedule[i].append(period(1,newTime1,newTime2))
                     durationPeriod += self.periodLength
+                    self.totalPeriodsWeek += 1
             self.schedule[i].sort(key=periodSort)
+        self.getBlockNumbers()
+            
+    def getBlockNumbers(self):
+        block = [0,1,2,3]
+        self.blockLimit = self.chunkIt(self.totalPeriodsWeek,self.noOfBlocks)
+        self.blockNo = [block[i] for i in range(len(self.blockLimit)) for j in range(self.blockLimit[i]) ]
+        shuffle(self.blockNo) 
+        print(self.blockNo)
+        counter = 0
+        for day in self.schedule:
+            for period in day:
+                if period.blockName == 1:
+                    period.blockName = self.blockNo[counter]+1
+                    counter += 1
                 
-                
+        
 
     def formatTime(self,time):
         hours,minutes = time
@@ -127,9 +148,22 @@ class schedule:
             print(f'Day {i+1}:')
             for period in day:
                 print(f'{period.blockName}   {self.formatTime(period.startTime)}   {self.formatTime(period.endTime)}')
+    
+    def chunkIt(self,num1,num2):
+        seq = [ 0 for i in range(num1)]
+        avg = len(seq) / float(num2)
+        out = []
+        last = 0.0
+
+        while last < len(seq):
+            out.append(seq[int(last):int(last + avg)])
+            last += avg
+
+        return [ len(parts) for parts in out]
 
 timetable = schedule()
 timetable.addingLimits()
 timetable.addRestrictionTimeDaily('break',(9,30),(9,50))
 timetable.GetSchedule()
 timetable.displaySchedule()
+print(timetable.totalPeriodsWeek)
