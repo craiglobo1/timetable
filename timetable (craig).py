@@ -91,21 +91,23 @@ class schedule:
         # extraTime = extraTime[0]*60 + extraTime[1]
         totalTime = time + extraTime
         totalTime = (floor(totalTime/60),totalTime%60)
-        # if totalTime[0] >= 24:
-        #     totalTime[0] -= 24
+        if totalTime[0] >= 24:
+            totalTime[0] -= 24
         return totalTime
 
     def GetSchedule(self):
         for i in range(len(self.schedule)):
             for j in range(len(self.schedule[i])-1): 
                 periods = self.getFreePeriods(self.schedule[i][j],self.schedule[i][j+1])
-                print(periods)
+                # print(periods)
                 durationPeriod = 0
                 for z in range(periods):
-                    newTime1 = self.addTime(self.schedule[i][0].endTime,durationPeriod)
+                    newTime1 = self.addTime(self.schedule[i][j].endTime,durationPeriod)
                     newTime2 = self.addTime(newTime1,self.periodLength)
                     self.schedule[i].append(period(1,newTime1,newTime2))
                     durationPeriod += self.periodLength
+            self.schedule[i].sort(key=periodSort)
+                
                 
 
     def formatTime(self,time):
