@@ -27,20 +27,30 @@ class Timetable:
                 self.teachers.append(data)
         return self.teachers
 
+    
 
-    def getClassesForBlockTeacher(self):
-        self.result.append(self.teachersList[i][0])
-        self.result.append(self.teachersList[i][1])
-
-    def getClassesForBlockStudents(self):
-        return NotImplementedError
+    def getClassesForBlockTeacher(self,sub):
+        for i in range(len(self.teachersList)):
+            if self.teacherList[i][1] == sub and self.teacherList[i][2] < 29:
+                self.teacherList[i][2] = self.teacherList[i][2] + 1
+            else:
+                with open('ErrorReports.csv','a') as af:
+                    af.append(self.teacherList[i][1])
         
     def PrintClassTeacher(self):
         run = True
+        constant = len(self.studentList)/4
         while run == True:
-            getClassesForBlockTeacher()
             for i in range(4):
-                pass
+                for stud in range(len(self.studentsList)):
+                    if self.studentsList[stud][1] == 'math':
+                        getClassesForBlockTeacher('math')
+                        self.studentList[stud].pop(1)
+                    
+            if len(self.studentList) == constant:
+                run = False     
+                    
+
 
     def collateClasses(self):
         return NotImplementedError
@@ -58,4 +68,4 @@ class Timetable:
         return NotImplementedError
 
 time = Timetable()
-time.PrintClassTeacher()
+print(time.PrintClassTeacher())

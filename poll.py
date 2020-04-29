@@ -119,7 +119,7 @@ for i,classlength in enumerate(NoClassesPerBlock):
         except:
             pass
 
-        if blockLimitPerSubject == block.count(currentClass):
+        if blockLimitPerSubject == blocks[i].count(currentClass):
             pass
             pass
 
