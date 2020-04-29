@@ -3,54 +3,63 @@ class Timetable:
         self.startTime = startTime
         self.endTime = endtime
         self.schedule = []
-        self.subjectList = ['physics','chemistry','biology','cs','business','accounts','economics','art','english','history','geography']
+        self.subjectList = ['physics','chemistry','biology','cs','business','accounts','economics','art','english','history','geography','math','it','pe']
         self.STUDENTLIMIT = 28
         self.studentsList = self.loadDataStudents()
         self.teachersList = self.loadDataTeachers()
         self.result = []
+        self.students = []
+        self.teachers = []
 
     def loadDataStudents(self):
-        self.students = []
         with open(r'F:\craigComp\Programming\python\timetable\Input Excel.csv','r') as rf:
             for line in rf:
-                data = line.strip()
+                data = line.strip().lower()
                 data = data.split(',')
                 self.students.append(data)
         return self.students
 
     def loadDataTeachers(self):
-        self.teachers = []
         with open(r'F:\craigComp\Programming\python\timetable\teachers.csv','r') as rf:
             for line in rf:
-                data = line.strip()
+                data = line.strip().lower()
                 data = data.split(',')
                 self.teachers.append(data)
         return self.teachers
 
-    
-
-    def getClassesForBlockTeacher(self,sub):
+    def getClassesForBlockTeacher(self,sub,blockNoI):
         for i in range(len(self.teachersList)):
-            if self.teacherList[i][1] == sub and self.teacherList[i][2] < 29:
-                self.teacherList[i][2] = self.teacherList[i][2] + 1
+            if self.teachersList[i][1] == sub and self.teachersList[i][blockNoI] < 29:
+                self.counter +=1
+
             else:
                 with open('ErrorReports.csv','a') as af:
-                    af.append(self.teacherList[i][1])
-        
-    def PrintClassTeacher(self):
+                    af.write(self.teachersList[i][0])
+    
+
+
+    def printClassTeacher(self):
         run = True
-        constant = len(self.studentList)/4
+        constant = len(self.studentsList)
         while run == True:
             for i in range(4):
-                for stud in range(len(self.studentsList)):
-                    if self.studentsList[stud][1] == 'math':
-                        getClassesForBlockTeacher('math')
-                        self.studentList[stud].pop(1)
-                    
-            if len(self.studentList) == constant:
+                self.counter = 0
+                for stud in range(constant):
+                    for j in range(len(self.subjectList)):
+                        if self.studentsList[stud][1] == self.subjectList[j]:
+                            self.getClassesForBlockTeacher(self.subjectList[j],(i+2))
+                            self.studentsList[stud].pop(1)
+                 
+            print ('List',self.totalLength())
+            if self.totalLength() <= constant:
                 run = False     
+                print(self.studentsList)
                     
-
+    def totalLength(self):
+        totalLength = 0
+        for student in self.studentsList:
+            totalLength += len(student)
+        return totalLength
 
     def collateClasses(self):
         return NotImplementedError
@@ -68,4 +77,6 @@ class Timetable:
         return NotImplementedError
 
 time = Timetable()
-print(time.PrintClassTeacher())
+print(time.printClassTeacher())
+
+        
