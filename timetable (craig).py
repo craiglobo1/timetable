@@ -1,49 +1,6 @@
 from math import floor
 from random import randint,choices,shuffle
-import numpy as np
-
-class Timetable:
-    def __init__(self,startTime = (7,30),endtime = (1,50)):
-        self.startTime = startTime
-        self.endTime = endtime
-        self.schedule = []
-        self.subjectList = ['physics','chemistry','biology','cs','business','accounts','economics','art','english','history','geography']
-        self.STUDENTLIMIT = 28
-        self.studentsList = self.loadDataStudents()
-        self.teachersList = self.loadDataTeachers()
-        self.result = []
-
-    def loadDataStudents(self):
-        self.students = []
-        with open(r'F:\craigComp\Programming\python\timetable\Input Excel.csv','r') as rf:
-            for line in rf:
-                data = line.strip()
-                data = data.split(',')
-                self.students.append(data)
-        return self.students
-
-    def loadDataTeachers(self):
-        self.teachers = []
-        with open(r'F:\craigComp\Programming\python\timetable\teachers.csv','r') as rf:
-            for line in rf:
-                data = line.strip()
-                data = data.split(',')
-                self.teachers.append(data)
-        return self.teachers
-
-    
-
-    def getClassesForBlockTeacher(self,sub):
-        for i in range(len(self.teachersList)):
-            if self.teacherList[i][1] == sub and self.teacherList[i][2] < 29:
-                self.teacherList[i][2] = self.teacherList[i][2] + 1
-            else:
-                with open('ErrorReports.csv','a') as af:
-                    af.append(self.teacherList[i][1])
-        
-    def PrintClassTeacher(self):
-        return NotImplementedError
-
+import pandas as pd
 
 def periodSort(period):
     return period.startTime[0]*60 + period.startTime[1]
@@ -62,7 +19,7 @@ class schedule:
         self.schedule = [ [] for i in range(self.noOfClassDays)]
         self.dayStartTime = (7,30)
         self.dayEndTime = (13,50)
-        self.weekdays = {'sunday': 0,'monday':1,'tuesday':2,'wensday':3,'thursday':4}
+        self.weekdays = {0:'Sunday',1:'Monday',2:'Tuesday',3:'Wensday',4:'Thursday'}
         self.noOfBlocks = 4
 
     def calculateNoPeriods(self):
@@ -101,6 +58,11 @@ class schedule:
         return totalTime
 
     def GetSchedule(self):
+
+        self.addPeriods()
+        self.getBlockNumbers()
+
+    def addPeriods(self):
         self.totalPeriodsWeek = 0
         for i in range(len(self.schedule)):
             for j in range(len(self.schedule[i])-1): 
@@ -114,14 +76,13 @@ class schedule:
                     durationPeriod += self.periodLength
                     self.totalPeriodsWeek += 1
             self.schedule[i].sort(key=periodSort)
-        self.getBlockNumbers()
+
             
     def getBlockNumbers(self):
         block = [0,1,2,3]
         self.blockLimit = self.chunkIt(self.totalPeriodsWeek,self.noOfBlocks)
         self.blockNo = [block[i] for i in range(len(self.blockLimit)) for j in range(self.blockLimit[i]) ]
         shuffle(self.blockNo) 
-        print(self.blockNo)
         counter = 0
         for day in self.schedule:
             for period in day:
@@ -145,25 +106,33 @@ class schedule:
     
     def displaySchedule(self):
         for i,day in enumerate(self.schedule):
-            print(f'Day {i+1}:')
-            for period in day:
-                print(f'{period.blockName}   {self.formatTime(period.startTime)}   {self.formatTime(period.endTime)}')
+            print(f'\n{self.weekdays[i]}:\n')
+            for j,period in enumerate(day):
+                if type(period.blockName) == type(1):
+                    print(f'block {period.blockName}   {self.formatTime(period.startTime)}   {self.formatTime(period.endTime)}')
+                else:
+                    print(f'{period.blockName}     {self.formatTime(period.startTime)}   {self.formatTime(period.endTime)}')
+                pass
+    def runSchedule(self):
+
+        self.addingLimits()
+        self.addRestrictionTimeDaily('break',(9,30),(9,50))
+        self.addRestrictionTimeDaily('Class Teacher',(7,30),(8,10))
+        self.GetSchedule()
+        self.displaySchedule()
+
     
     def chunkIt(self,num1,num2):
-        seq = [ 0 for i in range(num1)]
-        avg = len(seq) / float(num2)
+        avgLower = floor(num1/num2)
+        extraNum = num1%num2
         out = []
-        last = 0.0
-
-        while last < len(seq):
-            out.append(seq[int(last):int(last + avg)])
-            last += avg
-
-        return [ len(parts) for parts in out]
+        for i in range(num2):
+            if extraNum != 0:
+                extraNum -= 1
+                out.append(avgLower+1)
+            else:
+                out.append(avgLower)
+        return out
 
 timetable = schedule()
-timetable.addingLimits()
-timetable.addRestrictionTimeDaily('break',(9,30),(9,50))
-timetable.GetSchedule()
-timetable.displaySchedule()
-print(timetable.totalPeriodsWeek)
+timetable.runSchedule()

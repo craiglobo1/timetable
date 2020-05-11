@@ -11,7 +11,8 @@ class Poll:
     def getSubjectData(self):
         self.subjects = []
         self.students = []
-        with open('Input Excel Poll.csv') as wf:
+        with open(r'F:\craigComp\Programming\python\timetable\databases\Input Excel Poll.csv') as wf:
+    
             for line in wf:
                 data = line.split(',')
                 data = [ info.strip().lower() for info in data]
@@ -122,14 +123,20 @@ class Poll:
             if not(self.classes):
                     break
     
-    def getPollResult(self):
-        self.getSubjectData()
+    def getClassesInfo(self):
         self.getClasses(self.studentLimit)
-        self.getClassesPerBlock()
+        (self.getClassesPerBlock())
+
+    def getPopularityInfo(self):
         self.popularity(self.students,self.subjects,self.popularStudentLimit)
         self.getPopularClasses()
         self.createBlockPopular()
         self.removeClassesPopularAmt()
+    
+    def getPollResult(self):
+        self.getSubjectData()
+        self.getClassesInfo()
+        self.getPopularityInfo()
         self.AddSujectsToBlocks()
         print(self.blocks)
 
@@ -140,7 +147,7 @@ class Poll:
         out = []
         last = 0.0
 
-        while last < len(seq):
+        while last < len(seq):  
             out.append(seq[int(last):int(last + avg)])
             last += avg
 
