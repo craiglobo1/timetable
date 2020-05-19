@@ -4,6 +4,7 @@ SUBJECTLIST = ['physics', 'chemistry', 'biology', 'computer science', 'business'
                             'information technology', 'psychology', 'sociology', 'environmental']
 
 STUDENTLIMIT = 24
+
 noOfClassDays = 5
 periodLength = 50
 noOfBlocks = 4
@@ -20,3 +21,4 @@ def chunkIt(num1, num2):
         else:
             out.append(avgLower)
     return out
+

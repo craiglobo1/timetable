@@ -10,6 +10,5 @@ blocks = poll.runPoll()
 classes = Classes(blocks)
 classes.displayClasses()
 
-
 time = Schedule()
 time.runSchedule()

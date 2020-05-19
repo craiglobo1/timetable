@@ -1,10 +1,11 @@
 import pandas as pd
 
 
-class xlsxParser:
-    def __init__(self, filepath='databases\IGCSE-2-AS2019.xlsx'):
+class xlsxParser:       # retrives data in excel format (xlsx)
+    def __init__(self, filepath='databases\IGCSE-2-AS2019.xlsx'):  # constructor
         self.filepath = filepath
 
+    # converts excel postion(A5) to a tuple index like (1,5)
     def postionToTuple(self, tag='A5'):
         column = 0
         for i in range(len(tag)):
@@ -13,13 +14,13 @@ class xlsxParser:
                 break
 
         for i, letter in enumerate(tag[:index]):
-            column += (ord(letter)-ord('A')+1) * (26**(len(tag[:index])-i-1))            
+            column += (ord(letter)-ord('A')+1) * (26**(len(tag[:index])-i-1))
 
         position = (column, int(tag[index:]))
 
         return position
 
-    def getDatabase(self, initialPostion, finalPosition, sheetName, ):
+    def getDatabase(self, initialPostion, finalPosition, sheetName, ):  # revreives database as list
         self.initialPosition = self.postionToTuple(initialPostion)
         self.finalPosition = self.postionToTuple(finalPosition)
         self.dfs = pd.read_excel(
@@ -29,6 +30,6 @@ class xlsxParser:
 
         return self.dfs.values.tolist()
 
-    def printClass(self):
+    def printClass(self):       # displays database
         print(self.initialPosition, self.finalPosition)
         print(self.dfs)
